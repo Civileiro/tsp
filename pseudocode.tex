@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage[portuguese,ruled,lined,linesnumbered,vlined]{algorithm2e}
+
+\begin{document}
+\begin{algorithm}[H]
+\DontPrintSemicolon
+\caption{Held-Karp}
+\Entrada{
+    Um conjunto de cidades $cs$ de tamanho $n$ e uma função $d$ que retorna a distancia entre duas cidades
+}
+\Saida{O tamanho do menor caminho $t$ que passa por todas as cidades e volta}
+\Inicio{
+    \tcp{retirar cidade inicial}
+    $c0$ \gets $cs$.pop() \;
+    \tcp{mapa indexado por um conjunto de cidades e uma cidade}
+    $g \gets \{\}$ \;
+    \ParaCada{$c \in cs$} {
+        $g[\{c\}, c] \gets d(c0, c)$
+    }
+    \Para{$s \gets 2$ \Ate $n - 1$} {
+        \ParaCada{$S \subseteq cs, |S| = s$} {
+            \ParaCada{$k \in S$} {
+                $melhor \gets -1$\;
+                \ParaCada{$m \in S, m \ne k$} {
+                    $custo \gets g[S $\setminus$ k, m] + d(m, k)$\;
+                    \Se {$custo < melhor \lor melhor = -1$} {
+                        $melhor \gets custo$
+                    }
+                }
+                $g[S, k] \gets melhor$
+            }
+        }
+    }
+    $melhor \gets -1$\;
+    \ParaCada{$c \in cs$} {
+        $custo \gets g[cs, c] + d(c, c0)$\;
+        \Se {$custo < melhor \lor melhor = -1$} {
+            $melhor \gets custo$
+        }
+    }
+    \Retorna{$melhor$}
+}
+\end{algorithm}
+\end{document}
